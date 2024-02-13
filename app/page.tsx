@@ -13,21 +13,19 @@ export default function Chat() {
   console.log(messages, input);
   return (
     <StepsProvider>
-      <div className="flex p-6 items-center justify-center ">
-        <div className="flex flex-col justify-between p-11">
-          {showInput ? (
-            <TextareaWithButton
-              input={input}
-              handleInputChange={handleInputChange}
-              handleSubmit={(e) => {
-                handleSubmit(e);
-                setShowInput(false);
-              }}
-            />
-          ) : (
-            <InitialBreakdown messages={messages} />
-          )}
-        </div>
+      <div>
+        {showInput ? (
+          <TextareaWithButton
+            input={input}
+            handleInputChange={handleInputChange}
+            handleSubmit={(e) => {
+              handleSubmit(e);
+              setShowInput(false);
+            }}
+          />
+        ) : (
+          <InitialBreakdown messages={messages} />
+        )}
       </div>
     </StepsProvider>
   );

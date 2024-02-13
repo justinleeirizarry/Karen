@@ -22,12 +22,14 @@ function InitialBreakdown({ messages }: MessageSectionProps) {
   );
 
   return (
-    <div className="col-span-1">
-      <div className="flex justify-center p-6 text-xl ">
+    <div>
+      <div className="border w-screen justify-center p-6 text-2xl  ">
         {hasNonUserMessages && (
-          <div className="text-3xl font-bold ">
-            Please confirm <span className="text-cyan-500">every</span> step.
-          </div>
+          <header className="flex justify-center font-bold w-full text-[8rem] p-14">
+            <span>Confirm</span>
+            <span className="text-cyan-500 px-8">Every</span>
+            <span>Step.</span>
+          </header>
         )}
         <Breakdown messages={transformedMessages} />
       </div>
