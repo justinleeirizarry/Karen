@@ -1,5 +1,5 @@
 import React from "react";
-import { Breakdown } from "./Breakdown";
+import { Steps } from "./Steps";
 
 interface Message {
   id: string;
@@ -11,7 +11,7 @@ interface MessageSectionProps {
   messages: Message[];
 }
 
-function InitialBreakdown({ messages }: MessageSectionProps) {
+function ListoSteps({ messages }: MessageSectionProps) {
   const transformedMessages = messages.map((msg) => ({
     ...msg,
     content: msg.content,
@@ -23,7 +23,7 @@ function InitialBreakdown({ messages }: MessageSectionProps) {
 
   return (
     <div>
-      <div className="border w-screen justify-center p-6 text-2xl  ">
+      <div className="border w-screen justify-center p-12 text-2xl  ">
         {hasNonUserMessages && (
           <header className="flex justify-center font-bold w-full text-[8rem] p-14">
             <span>Confirm</span>
@@ -31,10 +31,10 @@ function InitialBreakdown({ messages }: MessageSectionProps) {
             <span>Step.</span>
           </header>
         )}
-        <Breakdown messages={transformedMessages} />
+        <Steps messages={transformedMessages} />
       </div>
     </div>
   );
 }
 
-export default InitialBreakdown;
+export default ListoSteps;

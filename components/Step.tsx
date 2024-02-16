@@ -1,9 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Message } from "./Breakdown";
+import { Message } from "./Steps";
 import StepEditor from "./StepEditor";
-import { StepMenu } from "./StepMenu";
+import { Button } from "./ui/button";
 import { useSteps } from "../contexts/TaskStepContext";
-import Checkmark from "./Checkbox";
 
 interface MessageItemProps {
   message: Message;
@@ -50,6 +49,7 @@ export const Step: React.FC<MessageItemProps> = ({
     },
     [editedText, lines, message.id, updateMessageContent, setEditing]
   );
+
   const handleConfirm = useCallback(
     (index: number) => {
       const content = lines[index];
@@ -61,6 +61,7 @@ export const Step: React.FC<MessageItemProps> = ({
     },
     [addStep, lines]
   );
+
   useEffect(() => {
     setConfirmedLines(new Array(lines.length).fill(false));
   }, [lines.length]);
@@ -77,22 +78,40 @@ export const Step: React.FC<MessageItemProps> = ({
           }}
         >
           <div
-            className={`
-
-            } border-t-2 border-black bg-white w-screen flex items-top pb-20 px-8`}
-            onClick={() => handleConfirm(index)}
+            className={`rounded-full bg-white min-h-[10rem] p-12 text-2xl justify-center ${
+              confirmedLines[index]
+                ? "ring-4 ring-green-500"
+                : "border-8 border-black"
+            }`}
           >
             {editingLineIndex === index ? (
-              <>
-                <StepEditor
-                  line={line}
-                  onSave={() => handleSave(index)}
-                  onCancel={handleInputChange}
-                />
-              </>
+              <StepEditor
+                line={line}
+                onSave={() => handleSave(index)}
+                onCancel={handleInputChange}
+              />
             ) : (
-              <div className="flex-1 flex justify-between ">
+              <div className="flex justify-between gap-3">
                 <p className="flex-1">{line}</p>
+                <Button
+                  onClick={() => handleConfirm(index)}
+                  className={`${
+                    confirmedLines[index]
+                      ? "bg-green-500 text-white"
+                      : "bg-sky-300 text-white"
+                  }`}
+                >
+                  {confirmedLines[index] ? "Confirmed" : "Confirm"}
+                </Button>
+                <Button
+                  onClick={() => handleEdit(index, line)}
+                  disabled={confirmedLines[index]}
+                  className={`${
+                    confirmedLines[index] ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
+                  Edit
+                </Button>
               </div>
             )}
           </div>

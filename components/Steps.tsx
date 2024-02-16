@@ -8,7 +8,7 @@ export interface Message {
   role: string;
 }
 
-export const Breakdown: React.FC<{ messages: Message[] }> = ({ messages }) => {
+export const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
   const [localMessages, setLocalMessages] = useState<Message[]>(messages);
   const filteredMessages = localMessages.filter((m) => m.role !== "user");
   useEffect(() => {
