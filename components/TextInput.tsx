@@ -24,14 +24,6 @@ export default function TextareaWithButton({
           value={input}
           onChange={handleInputChange}
         />
-        <Button
-          className=" flex-col text-5xl font-bold whitespace-normal break-words w-full min-h-[21rem] mt-8 bg-transparent border-[1rem] rounded-full border-black hover:bg-sky-300 text-black py-2 px-4 leading-[2.5rem] line-clamp-3 max-w-prose"
-          type="submit"
-        >
-          <span className=" text-7xl font-black leading-[6.5rem]">
-            This is a button
-          </span>
-        </Button>
       </form>
     </div>
   );

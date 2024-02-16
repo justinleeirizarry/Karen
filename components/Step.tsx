@@ -78,10 +78,10 @@ export const Step: React.FC<MessageItemProps> = ({
           }}
         >
           <div
-            className={`rounded-full bg-white min-h-[10rem] p-12 text-2xl justify-center ${
+            className={`rounded-full bg-white min-h-[5rem] p-12 text-2xl justify-center ${
               confirmedLines[index]
                 ? "ring-4 ring-green-500"
-                : "border-8 border-black"
+                : "border-4 border-black"
             }`}
           >
             {editingLineIndex === index ? (
