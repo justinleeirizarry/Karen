@@ -19,7 +19,10 @@ export const Step: React.FC<MessageItemProps> = ({
 }) => {
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null);
   const [editedText, setEditedText] = useState<string>("");
-  const [confirmedLines, setConfirmedLines] = useState<boolean[]>([]);
+  // Adjusted to use an object for tracking confirmation statuses
+  const [confirmedLines, setConfirmedLines] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [allConfirmed, setAllConfirmed] = useState<boolean>(false);
 
   const { addStep } = useSteps();
@@ -37,11 +40,15 @@ export const Step: React.FC<MessageItemProps> = ({
 
   const handleDelete = useCallback(
     (indexToDelete: number) => {
+      const contentToDelete = lines[indexToDelete];
       const updatedLines = lines.filter((_, index) => index !== indexToDelete);
       updateMessageContent(message.id, updatedLines.join("\n"));
-      setConfirmedLines((current) =>
-        current.filter((_, index) => index !== indexToDelete)
-      );
+
+      setConfirmedLines((prevConfirmed) => {
+        const updatedConfirmed = { ...prevConfirmed };
+        delete updatedConfirmed[contentToDelete];
+        return updatedConfirmed;
+      });
 
       if (editingLineIndex === indexToDelete) {
         setEditing(false);
@@ -66,35 +73,32 @@ export const Step: React.FC<MessageItemProps> = ({
       setEditingLineIndex(null);
       setEditing(false);
     },
-
-    [
-      editedText,
-      lines,
-      message.id,
-      updateMessageContent,
-      setEditingLineIndex,
-      setEditing,
-    ]
+    [editedText, lines, message.id, updateMessageContent, setEditing]
   );
 
   const handleConfirm = useCallback(
     (index: number) => {
       const content = lines[index];
       addStep({ content });
-      setConfirmedLines((current) =>
-        current.map((confirmed, i) => (i === index ? true : confirmed))
-      );
+      setConfirmedLines((prev) => ({ ...prev, [content]: true }));
     },
     [addStep, lines]
   );
 
   useEffect(() => {
-    setConfirmedLines(new Array(lines.length).fill(false));
-  }, [lines.length]);
+    const newConfirmedLines = lines.reduce(
+      (acc, line) => {
+        acc[line] = confirmedLines[line] || false;
+        return acc;
+      },
+      {} as { [key: string]: boolean }
+    );
+    setConfirmedLines(newConfirmedLines);
 
-  useEffect(() => {
-    setAllConfirmed(confirmedLines.every((confirmed) => confirmed));
-  }, [confirmedLines]);
+    setAllConfirmed(
+      Object.values(newConfirmedLines).every((confirmed) => confirmed)
+    );
+  }, [lines, confirmedLines]);
 
   return (
     <ul className="list-none">
@@ -106,7 +110,7 @@ export const Step: React.FC<MessageItemProps> = ({
         >
           <div
             className={`rounded-full min-h-[5rem] p-12 text-2xl justify-center transition-all duration-100 ${
-              confirmedLines[index]
+              confirmedLines[line]
                 ? "bg-teal-500 border-4 border-black"
                 : "bg-white [box-shadow:5px_5px_rgb(82_82_82)] border-4 border-black active:translate-x-[3px] active:translate-y-[3px] active:[box-shadow:0px_0px_rgb(82_82_82)]"
             }`}
@@ -122,10 +126,10 @@ export const Step: React.FC<MessageItemProps> = ({
               <div className="flex justify-between gap-3">
                 <p className="flex-1">{line}</p>
                 <ConfirmButton
-                  isConfirmed={confirmedLines[index]}
+                  isConfirmed={confirmedLines[line]}
                   onClick={() => handleConfirm(index)}
                 />
-                {!confirmedLines[index] && (
+                {!confirmedLines[line] && (
                   <Button onClick={() => handleEdit(index, line)} className="">
                     Edit
                   </Button>
