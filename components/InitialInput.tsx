@@ -3,7 +3,7 @@ import TextareaWithButton from "./TextInput";
 
 interface InitialInputProps {
   input: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 

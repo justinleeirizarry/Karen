@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { Step } from "./Step";
 
 export interface Message {
@@ -9,11 +8,14 @@ export interface Message {
 }
 
 export const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
-  const [localMessages, setLocalMessages] = useState<Message[]>(messages);
-  const filteredMessages = localMessages.filter((m) => m.role !== "user");
+  const [localMessages, setLocalMessages] = useState<Message[]>([]);
+
   useEffect(() => {
     setLocalMessages(messages);
+    console.log(messages);
   }, [messages]);
+
+  const filteredMessages = localMessages.filter((m) => m.role !== "user");
 
   const updateMessageContent = (id: string, newContent: string) => {
     console.log(`Updating message ${id} with new content: ${newContent}`);
@@ -25,17 +27,15 @@ export const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
 
   return (
     <div>
-      {filteredMessages
-        .filter((m) => m.role !== "user")
-        .map((message) => (
-          <div key={message.id} className="mt-2">
-            <Step
-              message={message}
-              setEditing={() => {}}
-              updateMessageContent={updateMessageContent}
-            />
-          </div>
-        ))}
+      {filteredMessages.map((message) => (
+        <div key={message.id} className="mt-2">
+          <Step
+            message={message}
+            setEditing={() => {}}
+            updateMessageContent={updateMessageContent}
+          />
+        </div>
+      ))}
     </div>
   );
 };

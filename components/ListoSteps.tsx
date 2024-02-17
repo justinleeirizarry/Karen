@@ -12,18 +12,11 @@ interface MessageSectionProps {
 }
 
 function ListoSteps({ messages }: MessageSectionProps) {
-  const transformedMessages = messages.map((msg) => ({
-    ...msg,
-    content: msg.content,
-  }));
-
-  const hasNonUserMessages = transformedMessages.some(
-    (m) => m.role === "assistant"
-  );
-
+  const hasNonUserMessages = messages.some((m) => m.role === "assistant");
+  console.log(messages);
   return (
     <div>
-      <div className="border w-screen justify-center p-12 text-2xl  ">
+      <div className="border w-screen justify-center p-12 text-2xl">
         {hasNonUserMessages && (
           <header className="flex justify-center font-bold w-full text-[8rem] p-14">
             <span>Confirm</span>
@@ -31,7 +24,7 @@ function ListoSteps({ messages }: MessageSectionProps) {
             <span>Step.</span>
           </header>
         )}
-        <Steps messages={transformedMessages} />
+        <Steps messages={messages} />
       </div>
     </div>
   );

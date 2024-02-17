@@ -9,6 +9,7 @@ interface StepsContextProps {
   addStep: (step: Step) => void;
   removeStep: (content: string) => void;
   updateStep: (oldContent: string, newContent: string) => void;
+  confirmStep: (content: string) => void;
 }
 
 const StepsContext = createContext<StepsContextProps | undefined>(undefined);
@@ -36,8 +37,18 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
     );
   };
 
+  const confirmStep = (content: string) => {
+    setSteps((prevSteps) =>
+      prevSteps.map((step) =>
+        step.content === content ? { ...step, confirmed: true } : step
+      )
+    );
+  };
+
   return (
-    <StepsContext.Provider value={{ steps, addStep, removeStep, updateStep }}>
+    <StepsContext.Provider
+      value={{ steps, addStep, removeStep, updateStep, confirmStep }}
+    >
       {children}
     </StepsContext.Provider>
   );
