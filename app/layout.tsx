@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Roboto } from "next/font/google";
+import { StepsProvider } from "@/contexts/TaskStepContext";
 
 const roboto = Roboto({
   weight: ["400", "700", "900"],
@@ -19,7 +20,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={roboto.className}>{children}</body>
+      <body className={roboto.className}>
+        <StepsProvider>{children}</StepsProvider>
+      </body>
     </html>
   );
 }

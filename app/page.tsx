@@ -12,21 +12,19 @@ export default function Chat() {
   const [showInput, setShowInput] = useState(true);
   console.log(messages, input);
   return (
-    <StepsProvider>
-      <div>
-        {showInput ? (
-          <TextareaWithButton
-            input={input}
-            handleInputChange={handleInputChange}
-            handleSubmit={(e) => {
-              handleSubmit(e);
-              setShowInput(false);
-            }}
-          />
-        ) : (
-          <InitialBreakdown messages={messages} />
-        )}
-      </div>
-    </StepsProvider>
+    <div>
+      {showInput ? (
+        <TextareaWithButton
+          input={input}
+          handleInputChange={handleInputChange}
+          handleSubmit={(e) => {
+            handleSubmit(e);
+            setShowInput(false);
+          }}
+        />
+      ) : (
+        <InitialBreakdown messages={messages} />
+      )}
+    </div>
   );
 }

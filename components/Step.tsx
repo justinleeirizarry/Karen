@@ -4,6 +4,7 @@ import StepEditor from "./StepEditor";
 import { Button } from "./ui/button";
 import { useSteps } from "@/contexts/TaskStepContext";
 import ConfirmButton from "./ConfirmButton";
+import Link from "next/link";
 
 interface MessageItemProps {
   message: Message;
@@ -34,6 +35,22 @@ export const Step: React.FC<MessageItemProps> = ({
     [setEditing]
   );
 
+  const handleDelete = useCallback(
+    (indexToDelete: number) => {
+      const updatedLines = lines.filter((_, index) => index !== indexToDelete);
+      updateMessageContent(message.id, updatedLines.join("\n"));
+      setConfirmedLines((current) =>
+        current.filter((_, index) => index !== indexToDelete)
+      );
+
+      if (editingLineIndex === indexToDelete) {
+        setEditing(false);
+        setEditingLineIndex(null);
+      }
+    },
+    [lines, message.id, updateMessageContent, editingLineIndex, setEditing]
+  );
+
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       setEditedText(event.target.value);
@@ -49,14 +66,21 @@ export const Step: React.FC<MessageItemProps> = ({
       setEditingLineIndex(null);
       setEditing(false);
     },
-    [editedText, lines, message.id, updateMessageContent, setEditing]
+
+    [
+      editedText,
+      lines,
+      message.id,
+      updateMessageContent,
+      setEditingLineIndex,
+      setEditing,
+    ]
   );
 
   const handleConfirm = useCallback(
     (index: number) => {
       const content = lines[index];
       addStep({ content });
-      console.log(`Confirmed content: ${content}`);
       setConfirmedLines((current) =>
         current.map((confirmed, i) => (i === index ? true : confirmed))
       );
@@ -69,8 +93,7 @@ export const Step: React.FC<MessageItemProps> = ({
   }, [lines.length]);
 
   useEffect(() => {
-    const areAllConfirmed = confirmedLines.every((confirmed) => confirmed);
-    setAllConfirmed(areAllConfirmed);
+    setAllConfirmed(confirmedLines.every((confirmed) => confirmed));
   }, [confirmedLines]);
 
   return (
@@ -79,10 +102,7 @@ export const Step: React.FC<MessageItemProps> = ({
         <li
           key={index}
           className="m-4 sticky"
-          style={{
-            top: `${index * 40}px`,
-            zIndex: 10 + index,
-          }}
+          style={{ top: `${index * 40}px`, zIndex: 10 + index }}
         >
           <div
             className={`rounded-full min-h-[5rem] p-12 text-2xl justify-center transition-all duration-100 ${
@@ -96,6 +116,7 @@ export const Step: React.FC<MessageItemProps> = ({
                 line={line}
                 onSave={() => handleSave(index)}
                 onCancel={handleInputChange}
+                onDelete={() => handleDelete(index)}
               />
             ) : (
               <div className="flex justify-between gap-3">
@@ -104,7 +125,6 @@ export const Step: React.FC<MessageItemProps> = ({
                   isConfirmed={confirmedLines[index]}
                   onClick={() => handleConfirm(index)}
                 />
-
                 {!confirmedLines[index] && (
                   <Button onClick={() => handleEdit(index, line)} className="">
                     Edit
@@ -115,11 +135,7 @@ export const Step: React.FC<MessageItemProps> = ({
           </div>
         </li>
       ))}
-      {allConfirmed && (
-        <Button className="bg-teal-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          All Steps Confirmed
-        </Button>
-      )}
+      {allConfirmed && <Link href="/dashboard">Dashboard</Link>}
     </ul>
   );
 };
