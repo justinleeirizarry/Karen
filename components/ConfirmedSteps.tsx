@@ -9,7 +9,7 @@ const ConfirmedStepsDisplay: React.FC = () => {
       <h2>Confirmed Steps</h2>
       <ul>
         {steps
-          .filter((step) => step.confirmed)
+          .filter((step) => step.content)
           .map((step, index) => (
             <li key={index}>{step.content}</li>
           ))}

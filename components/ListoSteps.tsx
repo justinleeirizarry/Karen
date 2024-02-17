@@ -1,10 +1,12 @@
 import React from "react";
 import { Steps } from "./Steps";
 
+type Role = "user" | "assistant" | "function" | "data" | "system" | "tool";
+
 interface Message {
   id: string;
   content: string;
-  role: "user" | "assistant" | "function" | "data" | "system" | "tool";
+  role: Role;
 }
 
 interface MessageSectionProps {

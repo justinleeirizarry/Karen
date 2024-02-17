@@ -2,8 +2,8 @@
 
 import { useChat } from "ai/react";
 import React, { useState } from "react";
-import TextareaWithButton from "../components/TextInput";
-import { StepsProvider } from "../contexts/TaskStepContext";
+import TextareaWithButton from "@/components/TextInput";
+import { StepsProvider } from "@/contexts/TaskStepContext";
 import InitialBreakdown from "@/components/ListoSteps";
 
 export default function Chat() {

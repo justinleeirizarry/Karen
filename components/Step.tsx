@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { Message } from "./Steps";
 import StepEditor from "./StepEditor";
 import { Button } from "./ui/button";
-import { useSteps } from "../contexts/TaskStepContext";
+import { useSteps } from "@/contexts/TaskStepContext";
 import ConfirmButton from "./ConfirmButton";
 
 interface MessageItemProps {
