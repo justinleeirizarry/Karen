@@ -19,44 +19,46 @@ export const Step: React.FC<MessageItemProps> = ({
 }) => {
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null);
   const [editedText, setEditedText] = useState<string>("");
-  // Adjusted to use an object for tracking confirmation statuses
-  const [confirmedLines, setConfirmedLines] = useState<{
-    [key: string]: boolean;
-  }>({});
   const [allConfirmed, setAllConfirmed] = useState<boolean>(false);
+  const [isAddingStep, setIsAddingStep] = useState(false);
 
-  const { addStep } = useSteps();
+  const { steps, addStep, removeStep, updateStep, confirmStep, setSteps } =
+    useSteps();
 
-  const lines = message.content.split("\n");
+  useEffect(() => {
+    const initialSteps = message.content
+      .split("\n")
+      .map((line) => line.replace(/^\d+\.\s*/, ""))
+      .map((content) => ({ content, confirmed: false }));
+
+    setSteps(initialSteps);
+  }, [message.content, setSteps]);
 
   const handleEdit = useCallback(
-    (index: number, line: string) => {
+    (index: number) => {
       setEditingLineIndex(index);
-      setEditedText(line);
+      setEditedText(steps[index].content);
       setEditing(true);
     },
-    [setEditing]
+    [setEditing, steps]
   );
 
   const handleDelete = useCallback(
     (indexToDelete: number) => {
-      const contentToDelete = lines[indexToDelete];
-      const updatedLines = lines.filter((_, index) => index !== indexToDelete);
-      updateMessageContent(message.id, updatedLines.join("\n"));
-
-      setConfirmedLines((prevConfirmed) => {
-        const updatedConfirmed = { ...prevConfirmed };
-        delete updatedConfirmed[contentToDelete];
-        return updatedConfirmed;
-      });
-
+      const contentToRemove = steps[indexToDelete].content;
+      removeStep(contentToRemove);
       if (editingLineIndex === indexToDelete) {
         setEditing(false);
         setEditingLineIndex(null);
       }
     },
-    [lines, message.id, updateMessageContent, editingLineIndex, setEditing]
+    [removeStep, editingLineIndex, setEditing, steps]
   );
+
+  const handleAddStepClick = useCallback(() => {
+    setIsAddingStep(true);
+    setEditingLineIndex(null);
+  }, []);
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -67,79 +69,74 @@ export const Step: React.FC<MessageItemProps> = ({
 
   const handleSave = useCallback(
     (index: number) => {
-      const updatedLines = [...lines];
-      updatedLines[index] = editedText;
-      updateMessageContent(message.id, updatedLines.join("\n"));
+      const oldContent = steps[index].content;
+      updateStep(oldContent, editedText);
       setEditingLineIndex(null);
       setEditing(false);
     },
-    [editedText, lines, message.id, updateMessageContent, setEditing]
+    [editedText, updateStep, setEditing, steps]
   );
 
   const handleConfirm = useCallback(
     (index: number) => {
-      const content = lines[index];
-      addStep({ content });
-      setConfirmedLines((prev) => ({ ...prev, [content]: true }));
+      confirmStep(steps[index].content);
     },
-    [addStep, lines]
+    [confirmStep, steps]
   );
 
   useEffect(() => {
-    const newConfirmedLines = lines.reduce(
-      (acc, line) => {
-        acc[line] = confirmedLines[line] || false;
-        return acc;
-      },
-      {} as { [key: string]: boolean }
-    );
-    setConfirmedLines(newConfirmedLines);
+    setAllConfirmed(steps.every((step) => step.confirmed));
+  }, [steps]);
 
-    setAllConfirmed(
-      Object.values(newConfirmedLines).every((confirmed) => confirmed)
-    );
-  }, [lines, confirmedLines]);
+  const handleSaveNewStep = useCallback(
+    (newStepContent: string) => {
+      addStep({ content: newStepContent, confirmed: false });
+      setIsAddingStep(false);
+    },
+    [addStep]
+  );
 
   return (
     <ul className="list-none">
-      {lines.map((line, index) => (
-        <li
-          key={index}
-          className="m-4 sticky"
-          style={{ top: `${index * 40}px`, zIndex: 10 + index }}
-        >
-          <div
-            className={`rounded-full min-h-[5rem] p-12 text-2xl justify-center transition-all duration-100 ${
-              confirmedLines[line]
-                ? "bg-teal-500 border-4 border-black"
-                : "bg-white [box-shadow:5px_5px_rgb(82_82_82)] border-4 border-black active:translate-x-[3px] active:translate-y-[3px] active:[box-shadow:0px_0px_rgb(82_82_82)]"
-            }`}
+      {steps.map((step, index) => {
+        const isEditing = editingLineIndex === index;
+        return (
+          <li
+            key={index}
+            className="m-4 sticky"
+            style={{ top: `${index * 40}px`, zIndex: 10 + index }}
           >
-            {editingLineIndex === index ? (
-              <StepEditor
-                line={line}
-                onSave={() => handleSave(index)}
-                onCancel={handleInputChange}
-                onDelete={() => handleDelete(index)}
-              />
-            ) : (
-              <div className="flex justify-between gap-3">
-                <p className="flex-1">{line}</p>
-                <ConfirmButton
-                  isConfirmed={confirmedLines[line]}
-                  onClick={() => handleConfirm(index)}
+            <div
+              className={`rounded-full min-h-[5rem] p-12 text-2xl justify-center transition-all duration-100 ${
+                step.confirmed
+                  ? "bg-teal-500 border-4 border-black"
+                  : "bg-white [box-shadow:5px_5px_rgb(82_82_82)] border-4 border-black active:translate-x-[3px] active:translate-y-[3px] active:[box-shadow:0px_0px_rgb(82_82_82)]"
+              }`}
+            >
+              {isEditing ? (
+                <StepEditor
+                  line={step.content}
+                  onSave={() => handleSave(index)}
+                  onCancel={handleInputChange}
+                  onDelete={() => handleDelete(index)}
                 />
-                {!confirmedLines[line] && (
-                  <Button onClick={() => handleEdit(index, line)} className="">
-                    Edit
-                  </Button>
-                )}
-              </div>
-            )}
-          </div>
-        </li>
-      ))}
-      {allConfirmed && <Link href="/dashboard">Dashboard</Link>}
+              ) : (
+                <div className="flex justify-between gap-3">
+                  <p className="flex-1">{step.content}</p>
+                  <ConfirmButton
+                    isConfirmed={step.confirmed}
+                    onClick={() => handleConfirm(index)}
+                  />
+                  {!step.confirmed && (
+                    <Button onClick={() => handleEdit(index)}>Edit</Button>
+                  )}
+                </div>
+              )}
+            </div>
+          </li>
+        );
+      })}
+      {allConfirmed && <Link href="/dashboard">Go to Dashboard</Link>}
     </ul>
   );
 };

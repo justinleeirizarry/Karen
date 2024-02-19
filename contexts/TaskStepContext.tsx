@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState } from "react";
 
 interface Step {
   content: string;
+  confirmed: boolean;
 }
 
 interface StepsContextProps {
@@ -12,6 +13,7 @@ interface StepsContextProps {
   removeStep: (content: string) => void;
   updateStep: (oldContent: string, newContent: string) => void;
   confirmStep: (content: string) => void;
+  setSteps: (steps: Step[]) => void;
 }
 
 const StepsContext = createContext<StepsContextProps | undefined>(undefined);
@@ -49,7 +51,7 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
 
   return (
     <StepsContext.Provider
-      value={{ steps, addStep, removeStep, updateStep, confirmStep }}
+      value={{ steps, addStep, removeStep, updateStep, confirmStep, setSteps }}
     >
       {children}
     </StepsContext.Provider>
