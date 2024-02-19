@@ -3,8 +3,8 @@
 import { useChat } from "ai/react";
 import React, { useState } from "react";
 import TextareaWithButton from "@/components/TextInput";
-import { StepsProvider } from "@/contexts/TaskStepContext";
-import InitialBreakdown from "@/components/ListoSteps";
+
+import ListoSteps from "@/components/ListoSteps";
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
@@ -23,7 +23,7 @@ export default function Chat() {
           }}
         />
       ) : (
-        <InitialBreakdown messages={messages} />
+        <ListoSteps messages={messages} />
       )}
     </div>
   );

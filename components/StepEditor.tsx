@@ -5,24 +5,25 @@ import { Textarea } from "./ui/textarea";
 interface StepEditorProps {
   line: string;
   onSave: () => void;
-  onCancel: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onDelete: () => void;
+  onAdd?: () => void;
 }
 
 const StepEditor: React.FC<StepEditorProps> = ({
   line,
   onSave,
-  onCancel,
+  onChange,
   onDelete,
+  onAdd,
 }) => (
   <>
-    <Textarea defaultValue={line} onChange={onCancel} />
-    <Button className="m-2 m-h-full" onClick={onSave}>
-      Save
-    </Button>
-    <Button className="m-2 m-h-full" onClick={onDelete}>
-      Delete
-    </Button>
+    <Textarea defaultValue={line} onChange={onChange} />
+    <div className="flex space-x-2">
+      <Button onClick={onSave}>Save</Button>
+      <Button onClick={onDelete}>Delete</Button>
+      <Button onClick={onAdd}>Add Step Below</Button>{" "}
+    </div>
   </>
 );
 

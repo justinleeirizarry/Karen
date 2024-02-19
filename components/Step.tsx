@@ -20,45 +20,41 @@ export const Step: React.FC<MessageItemProps> = ({
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null);
   const [editedText, setEditedText] = useState<string>("");
   const [allConfirmed, setAllConfirmed] = useState<boolean>(false);
-  const [isAddingStep, setIsAddingStep] = useState(false);
 
   const { steps, addStep, removeStep, updateStep, confirmStep, setSteps } =
     useSteps();
 
   useEffect(() => {
-    const initialSteps = message.content
-      .split("\n")
-      .map((line) => line.replace(/^\d+\.\s*/, ""))
-      .map((content) => ({ content, confirmed: false }));
+    // This initialization logic might need adjustment to ensure IDs are unique and managed properly
+    const initialSteps = message.content.split("\n").map((line, index) => ({
+      id: index, // Placeholder for ID, consider using context or a more robust ID generation strategy
+      content: line.replace(/^\d+\.\s*/, ""),
+      confirmed: false,
+    }));
 
-    setSteps(initialSteps);
+    setSteps(initialSteps); // Initialize steps based on message content
   }, [message.content, setSteps]);
 
   const handleEdit = useCallback(
-    (index: number) => {
-      setEditingLineIndex(index);
-      setEditedText(steps[index].content);
+    (id: number) => {
+      const stepIndex = steps.findIndex((step) => step.id === id);
+      setEditingLineIndex(stepIndex);
+      setEditedText(steps[stepIndex].content);
       setEditing(true);
     },
-    [setEditing, steps]
+    [steps, setEditing]
   );
 
   const handleDelete = useCallback(
-    (indexToDelete: number) => {
-      const contentToRemove = steps[indexToDelete].content;
-      removeStep(contentToRemove);
-      if (editingLineIndex === indexToDelete) {
+    (id: number) => {
+      removeStep(id);
+      if (editingLineIndex !== null && steps[editingLineIndex]?.id === id) {
         setEditing(false);
         setEditingLineIndex(null);
       }
     },
-    [removeStep, editingLineIndex, setEditing, steps]
+    [removeStep, steps, editingLineIndex, setEditing]
   );
-
-  const handleAddStepClick = useCallback(() => {
-    setIsAddingStep(true);
-    setEditingLineIndex(null);
-  }, []);
 
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -68,32 +64,39 @@ export const Step: React.FC<MessageItemProps> = ({
   );
 
   const handleSave = useCallback(
-    (index: number) => {
-      const oldContent = steps[index].content;
-      updateStep(oldContent, editedText);
+    (id: number) => {
+      updateStep(id, editedText);
       setEditingLineIndex(null);
       setEditing(false);
     },
-    [editedText, updateStep, setEditing, steps]
+    [editedText, updateStep, setEditing]
   );
 
   const handleConfirm = useCallback(
-    (index: number) => {
-      confirmStep(steps[index].content);
+    (id: number) => {
+      confirmStep(id);
     },
-    [confirmStep, steps]
+    [confirmStep]
   );
 
   useEffect(() => {
     setAllConfirmed(steps.every((step) => step.confirmed));
   }, [steps]);
 
-  const handleSaveNewStep = useCallback(
-    (newStepContent: string) => {
-      addStep({ content: newStepContent, confirmed: false });
-      setIsAddingStep(false);
+  // Simplified for demonstration; consider implementing a more sophisticated approach for inserting at specific indices
+  const handleInsertStepAtIndex = useCallback(
+    (index: number) => {
+      // Local ID generation for demonstration; consider using a more robust method
+      const newId =
+        steps.length > 0 ? Math.max(...steps.map((s) => s.id)) + 1 : 1;
+
+      const newStep = { id: newId, content: "New Step", confirmed: false };
+      const updatedSteps = [...steps];
+      updatedSteps.splice(index + 1, 0, newStep); // Insert the new step after the current index
+
+      setSteps(updatedSteps); // Assuming this updates the entire steps array in your context
     },
-    [addStep]
+    [steps, setSteps]
   );
 
   return (
@@ -102,7 +105,7 @@ export const Step: React.FC<MessageItemProps> = ({
         const isEditing = editingLineIndex === index;
         return (
           <li
-            key={index}
+            key={step.id}
             className="m-4 sticky"
             style={{ top: `${index * 40}px`, zIndex: 10 + index }}
           >
@@ -116,19 +119,20 @@ export const Step: React.FC<MessageItemProps> = ({
               {isEditing ? (
                 <StepEditor
                   line={step.content}
-                  onSave={() => handleSave(index)}
-                  onCancel={handleInputChange}
-                  onDelete={() => handleDelete(index)}
+                  onSave={() => handleSave(step.id)}
+                  onChange={handleInputChange}
+                  onDelete={() => handleDelete(step.id)}
+                  onAdd={() => handleInsertStepAtIndex(index)}
                 />
               ) : (
                 <div className="flex justify-between gap-3">
                   <p className="flex-1">{step.content}</p>
                   <ConfirmButton
                     isConfirmed={step.confirmed}
-                    onClick={() => handleConfirm(index)}
+                    onClick={() => handleConfirm(step.id)}
                   />
                   {!step.confirmed && (
-                    <Button onClick={() => handleEdit(index)}>Edit</Button>
+                    <Button onClick={() => handleEdit(step.id)}>Edit</Button>
                   )}
                 </div>
               )}
