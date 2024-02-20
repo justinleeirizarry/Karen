@@ -8,7 +8,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h2>First Step</h2>
+      <h1>Steps</h1>
       {steps.length > 0 ? (
         steps.map((step, index) => <p key={index}>{step.content}</p>)
       ) : (

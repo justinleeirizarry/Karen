@@ -1,28 +1,22 @@
 "use client";
 
 import React, { createContext, useContext, useState, useCallback } from "react";
-
-let nextId = 0; // Initialize ID counter outside the component for session-wide scope
-
-const getNextId = () => {
-  nextId += 1; // Increment the ID
-  return nextId; // Return the new ID
-};
+import { v4 as uuidv4 } from "uuid";
 
 interface Step {
-  id: number; // Each step has a unique ID
+  id: string;
   content: string;
   confirmed: boolean;
 }
 
 interface StepsContextProps {
   steps: Step[];
-  addStep: (stepContent: string) => void; // Function to add a step
-  removeStep: (stepId: number) => void; // Function to remove a step by ID
-  updateStep: (stepId: number, newContent: string) => void; // Function to update a step by ID
-  confirmStep: (stepId: number) => void; // Function to confirm a step by ID
-  setSteps: (steps: Step[]) => void; // Function to directly set the steps array
-  resetSteps: () => void; // Function to reset steps and ID counter
+  addStep: (stepContent: string) => void;
+  removeStep: (stepId: string) => void;
+  updateStep: (stepId: string, newContent: string) => void;
+  confirmStep: (stepId: string) => void;
+  setSteps: (steps: Step[]) => void;
+  resetSteps: () => void;
 }
 
 const StepsContext = createContext<StepsContextProps | undefined>(undefined);
@@ -33,15 +27,15 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
   const [steps, setSteps] = useState<Step[]>([]);
 
   const addStep = useCallback((stepContent: string) => {
-    const newStep = { id: getNextId(), content: stepContent, confirmed: false };
+    const newStep = { id: uuidv4(), content: stepContent, confirmed: false };
     setSteps((prevSteps) => [...prevSteps, newStep]);
   }, []);
 
-  const removeStep = useCallback((stepId: number) => {
+  const removeStep = useCallback((stepId: string) => {
     setSteps((prevSteps) => prevSteps.filter((step) => step.id !== stepId));
   }, []);
 
-  const updateStep = useCallback((stepId: number, newContent: string) => {
+  const updateStep = useCallback((stepId: string, newContent: string) => {
     setSteps((prevSteps) =>
       prevSteps.map((step) =>
         step.id === stepId ? { ...step, content: newContent } : step
@@ -49,7 +43,7 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
     );
   }, []);
 
-  const confirmStep = useCallback((stepId: number) => {
+  const confirmStep = useCallback((stepId: string) => {
     setSteps((prevSteps) =>
       prevSteps.map((step) =>
         step.id === stepId ? { ...step, confirmed: true } : step
@@ -58,8 +52,7 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
   }, []);
 
   const resetSteps = useCallback(() => {
-    setSteps([]); // Clear the steps array
-    nextId = 0; // Reset the ID counter to start from 1 for the next step
+    setSteps([]);
   }, []);
 
   return (

@@ -1,10 +1,16 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { Message } from "./Steps";
+import { v4 as uuidv4 } from "uuid";
 import StepEditor from "./StepEditor";
 import { Button } from "./ui/button";
-import { useSteps } from "@/contexts/TaskStepContext";
 import ConfirmButton from "./ConfirmButton";
 import Link from "next/link";
+import { useSteps } from "@/contexts/TaskStepContext";
+
+interface Message {
+  id: string;
+  content: string;
+  confirmed: boolean;
+}
 
 interface MessageItemProps {
   message: Message;
@@ -20,33 +26,31 @@ export const Step: React.FC<MessageItemProps> = ({
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null);
   const [editedText, setEditedText] = useState<string>("");
   const [allConfirmed, setAllConfirmed] = useState<boolean>(false);
-
-  const { steps, addStep, removeStep, updateStep, confirmStep, setSteps } =
-    useSteps();
+  const { steps, removeStep, updateStep, confirmStep, setSteps } = useSteps();
 
   useEffect(() => {
-    // This initialization logic might need adjustment to ensure IDs are unique and managed properly
-    const initialSteps = message.content.split("\n").map((line, index) => ({
-      id: index, // Placeholder for ID, consider using context or a more robust ID generation strategy
-      content: line.replace(/^\d+\.\s*/, ""),
+    const initialSteps = message.content.split("\n").map((line) => ({
+      id: uuidv4(),
+      content: line.replace(/^\d+\.\s*/, ""), // Strip out numbered formatting
       confirmed: false,
     }));
-
-    setSteps(initialSteps); // Initialize steps based on message content
+    setSteps(initialSteps);
   }, [message.content, setSteps]);
 
   const handleEdit = useCallback(
-    (id: number) => {
+    (id: string) => {
       const stepIndex = steps.findIndex((step) => step.id === id);
-      setEditingLineIndex(stepIndex);
-      setEditedText(steps[stepIndex].content);
-      setEditing(true);
+      if (stepIndex >= 0) {
+        setEditingLineIndex(stepIndex);
+        setEditedText(steps[stepIndex].content);
+        setEditing(true);
+      }
     },
     [steps, setEditing]
   );
 
   const handleDelete = useCallback(
-    (id: number) => {
+    (id: string) => {
       removeStep(id);
       if (editingLineIndex !== null && steps[editingLineIndex]?.id === id) {
         setEditing(false);
@@ -64,7 +68,7 @@ export const Step: React.FC<MessageItemProps> = ({
   );
 
   const handleSave = useCallback(
-    (id: number) => {
+    (id: string) => {
       updateStep(id, editedText);
       setEditingLineIndex(null);
       setEditing(false);
@@ -73,31 +77,31 @@ export const Step: React.FC<MessageItemProps> = ({
   );
 
   const handleConfirm = useCallback(
-    (id: number) => {
+    (id: string) => {
       confirmStep(id);
     },
     [confirmStep]
   );
 
-  useEffect(() => {
-    setAllConfirmed(steps.every((step) => step.confirmed));
-  }, [steps]);
-
-  // Simplified for demonstration; consider implementing a more sophisticated approach for inserting at specific indices
   const handleInsertStepAtIndex = useCallback(
     (index: number) => {
-      // Local ID generation for demonstration; consider using a more robust method
-      const newId =
-        steps.length > 0 ? Math.max(...steps.map((s) => s.id)) + 1 : 1;
+      const newStep = {
+        id: uuidv4(),
+        content: "New Step",
+        confirmed: false,
+      };
 
-      const newStep = { id: newId, content: "New Step", confirmed: false };
       const updatedSteps = [...steps];
-      updatedSteps.splice(index + 1, 0, newStep); // Insert the new step after the current index
+      updatedSteps.splice(index + 1, 0, newStep);
 
-      setSteps(updatedSteps); // Assuming this updates the entire steps array in your context
+      setSteps(updatedSteps);
     },
     [steps, setSteps]
   );
+
+  useEffect(() => {
+    setAllConfirmed(steps.every((step) => step.confirmed));
+  }, [steps]);
 
   return (
     <ul className="list-none">

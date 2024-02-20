@@ -5,6 +5,7 @@ export interface Message {
   id: string;
   content: string;
   role: string;
+  confirmed: boolean;
 }
 
 export const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
@@ -12,7 +13,7 @@ export const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
 
   useEffect(() => {
     setLocalMessages(messages);
-    console.log(messages);
+    // console.log(messages);
   }, [messages]);
 
   const filteredMessages = localMessages.filter((m) => m.role !== "user");
