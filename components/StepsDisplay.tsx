@@ -1,5 +1,5 @@
 import React from "react";
-import { Steps } from "./Steps";
+import Steps from "./Steps";
 
 type Role = "user" | "assistant" | "function" | "data" | "system" | "tool";
 
@@ -17,7 +17,7 @@ interface StartingStepsProps {
   messages: ChatMessage[];
 }
 
-function ListoSteps({ messages }: StartingStepsProps) {
+function StepsDisplay({ messages }: StartingStepsProps) {
   const StepMessages: StepsMessage[] = messages.map((message) => ({
     ...message,
     confirmed: false,
@@ -41,4 +41,4 @@ function ListoSteps({ messages }: StartingStepsProps) {
   );
 }
 
-export default ListoSteps;
+export default StepsDisplay;

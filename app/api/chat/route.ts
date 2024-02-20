@@ -6,20 +6,10 @@ import { Message as VercelChatMessage, StreamingTextResponse } from 'ai';
 import { ChatOpenAI } from '@langchain/openai';
 import { BytesOutputParser } from 'langchain/schema/output_parser';
 import { PromptTemplate } from 'langchain/prompts';
-import { JsonOutputFunctionsParser } from "langchain/output_parsers";
+
  
 export const runtime = 'edge';
 
-const schema = z.object({
-  number: z.number().describe("The number of the step in the process"),
-  content: z.string().describe("The content of the step"),
-});
-
-
-/**
- * Basic memory formatter that stringifies and passes
- * message history directly into the model.
- */
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`;
 };
@@ -40,38 +30,16 @@ export async function POST(req: NextRequest) {
   const currentMessageContent = messages[messages.length - 1].content;
  
   const prompt = PromptTemplate.fromTemplate(TEMPLATE);
-  /**
-   * See a full list of supported models at:
-   * https://js.langchain.com/docs/modules/model_io/models/
-   */
+ 
   const model = new ChatOpenAI({
     temperature: 0.8,
     streaming: true,
   });
 
-  const functionCallingModel = model.bind({
-      functions: [
-        {
-          name: "output_formatter",
-          description: "Should always be used to properly format output",
-          parameters: zodToJsonSchema(schema),
-        },
-      ],
-      function_call: { name: "output_formatter" },
-    });
- 
-  /**
-   * Chat models stream message chunks rather than bytes, so this
-   * output parser handles serialization and encoding.
-   */
+
   const outputParser = new BytesOutputParser();
  
-  /*
-   * Can also initialize as:
-   *
-   * import { RunnableSequence } from "langchain/schema/runnable";
-   * const chain = RunnableSequence.from([prompt, model, outputParser]);
-   */
+
   const chain = prompt
   .pipe(model)
   .pipe(outputParser);

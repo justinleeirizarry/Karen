@@ -19,7 +19,6 @@ export default function Dashboard() {
         {steps.length > 0 ? (
           <ul className="list-decimal pl-5">
             {" "}
-            {/* Ensure proper padding for the bullet/number */}
             {steps.map((step, index) => (
               <li key={step.id || index}>{step.content}</li>
             ))}

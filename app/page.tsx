@@ -3,9 +3,9 @@
 import { useChat } from "ai/react";
 
 import React, { useState } from "react";
-import TextareaWithButton from "@/components/TextInput";
+import TextInput from "@/components/TaskInput";
 
-import ListoSteps from "@/components/ListoSteps";
+import ListoSteps from "@/components/StepsDisplay";
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
@@ -15,7 +15,7 @@ export default function Chat() {
   return (
     <div>
       {showInput ? (
-        <TextareaWithButton
+        <TextInput
           input={input}
           handleInputChange={handleInputChange}
           handleSubmit={(e) => {

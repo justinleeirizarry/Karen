@@ -8,7 +8,7 @@ interface TextareaWithButtonProps {
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export default function TextareaWithButton({
+function TaskInput({
   input,
   handleInputChange,
   handleSubmit,
@@ -26,3 +26,5 @@ export default function TextareaWithButton({
     </div>
   );
 }
+
+export default TaskInput;

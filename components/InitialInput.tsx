@@ -1,5 +1,5 @@
 import React from "react";
-import TextareaWithButton from "./TextInput";
+import TextareaWithButton from "./TaskInput";
 
 interface InitialInputProps {
   input: string;

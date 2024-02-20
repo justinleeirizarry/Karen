@@ -11,7 +11,7 @@ export interface Message {
   confirmed: boolean;
 }
 
-export const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
+const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
   const { steps, setSteps, setUserInput } = useSteps();
   const [allConfirmed, setAllConfirmed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -59,3 +59,5 @@ export const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
     </div>
   );
 };
+
+export default Steps;
