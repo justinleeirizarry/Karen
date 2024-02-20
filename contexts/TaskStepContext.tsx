@@ -11,10 +11,12 @@ interface Step {
 
 interface StepsContextProps {
   steps: Step[];
+  userInput: string;
   addStep: (stepContent: string) => void;
   removeStep: (stepId: string) => void;
   updateStep: (stepId: string, newContent: string) => void;
   confirmStep: (stepId: string) => void;
+  setUserInput: (input: string) => void;
   setSteps: (steps: Step[]) => void;
   resetSteps: () => void;
 }
@@ -25,6 +27,7 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
   children,
 }) => {
   const [steps, setSteps] = useState<Step[]>([]);
+  const [userInput, setUserInput] = useState<string>("");
 
   const addStep = useCallback((stepContent: string) => {
     const newStep = { id: uuidv4(), content: stepContent, confirmed: false };
@@ -51,6 +54,10 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
     );
   }, []);
 
+  const updateUserInput = useCallback((input: string) => {
+    setUserInput(input);
+  }, []);
+
   const resetSteps = useCallback(() => {
     setSteps([]);
   }, []);
@@ -59,10 +66,12 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
     <StepsContext.Provider
       value={{
         steps,
+        userInput,
         addStep,
         removeStep,
         updateStep,
         confirmStep,
+        setUserInput: updateUserInput,
         setSteps,
         resetSteps,
       }}

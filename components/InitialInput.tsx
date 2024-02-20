@@ -16,7 +16,7 @@ function InitialInput({
     <TextareaWithButton
       input={input}
       handleInputChange={handleInputChange}
-      handleSubmit={onSubmit}
+      handleSubmit={onSubmit} // Ensure onSubmit is correctly used as the form submission handler
     />
   );
 }

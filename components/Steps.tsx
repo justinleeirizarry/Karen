@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { useSteps } from "@/contexts/TaskStepContext";
 import { Step } from "./Step";
+import Link from "next/link";
 
 export interface Message {
   id: string;
@@ -9,34 +12,50 @@ export interface Message {
 }
 
 export const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
-  const [localMessages, setLocalMessages] = useState<Message[]>([]);
+  const { steps, setSteps, setUserInput } = useSteps();
+  const [allConfirmed, setAllConfirmed] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    setLocalMessages(messages);
-    // console.log(messages);
-  }, [messages]);
+    const latestUserMessage = messages.find((m) => m.role === "user");
+    if (latestUserMessage) {
+      setUserInput(latestUserMessage.content);
+    }
 
-  const filteredMessages = localMessages.filter((m) => m.role !== "user");
+    const instructions = messages
+      .filter((message) => message.role !== "user")
+      .flatMap((message) =>
+        message.content.split("\n").map((line) => ({
+          id: uuidv4(),
+          content: line.replace(/^\d+\.\s*/, ""),
+          confirmed: false,
+        }))
+      );
 
-  const updateMessageContent = (id: string, newContent: string) => {
-    console.log(`Updating message ${id} with new content: ${newContent}`);
-    const updatedMessages = localMessages.map((message) =>
-      message.id === id ? { ...message, content: newContent } : message
-    );
-    setLocalMessages(updatedMessages);
-  };
+    if (instructions.length > 0) {
+      setSteps(instructions);
+      setLoading(false);
+    }
+  }, [messages, setSteps, setUserInput]);
+
+  useEffect(() => {
+    setAllConfirmed(steps.every((step) => step.confirmed));
+  }, [steps]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      {filteredMessages.map((message) => (
-        <div key={message.id} className="mt-2">
-          <Step
-            message={message}
-            setEditing={() => {}}
-            updateMessageContent={updateMessageContent}
-          />
-        </div>
-      ))}
+      {messages
+        .filter((m) => m.role !== "user")
+        .map((message) => (
+          <div key={message.id} className="mt-2">
+            <Step message={message} />
+          </div>
+        ))}
+      {allConfirmed && <Link href="/dashboard">Go to Dashboard</Link>}
     </div>
   );
 };

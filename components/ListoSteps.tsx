@@ -23,12 +23,12 @@ function ListoSteps({ messages }: StartingStepsProps) {
     confirmed: false,
   }));
 
-  const AssistantMessages = StepMessages.some((m) => m.role === "assistant");
+  const Response = StepMessages.some((m) => m.role === "assistant");
 
   return (
     <div>
-      <div className="border w-screen justify-center p-12 text-2xl">
-        {AssistantMessages && (
+      <div className="w-screen justify-center p-12 text-2xl">
+        {Response && (
           <header className="flex justify-center font-bold w-full text-[8rem] p-14">
             <span>Confirm</span>
             <span className="text-cyan-500 px-8">Every</span>
