@@ -4,7 +4,7 @@ import StepEditor from "./StepEditor";
 import { Button } from "./ui/button";
 import ConfirmButton from "./ConfirmButton";
 
-import { useStepManager } from "./hooks/StepManager";
+import { useStepManager } from "./hooks/useStepManager";
 
 interface Message {
   id: string;
