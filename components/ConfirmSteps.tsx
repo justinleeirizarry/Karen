@@ -1,7 +1,6 @@
 import React from "react"
 import Steps from "./Steps"
 
-
 type Role = "user" | "assistant" | "function" | "data" | "system" | "tool"
 
 interface ChatMessage {
@@ -18,7 +17,7 @@ interface StartingStepsProps {
   messages: ChatMessage[]
 }
 
-function StepsDisplay({ messages }: StartingStepsProps) {
+function ConfirmSteps({ messages }: StartingStepsProps) {
   const StepMessages: StepsMessage[] = messages.map((message) => ({
     ...message,
     confirmed: false,
@@ -30,9 +29,9 @@ function StepsDisplay({ messages }: StartingStepsProps) {
     <div>
       <div className="w-screen justify-center p-12 text-2xl">
         {Response && (
-          <header className="flex justify-center font-bold w-full text-[8rem] p-14">
+          <header className="flex w-full justify-center p-14 text-[8rem] font-bold">
             <span>Confirm</span>
-            <span className="text-cyan-500 px-8">Every</span>
+            <span className="px-8 text-cyan-500">Every</span>
             <span>Step.</span>
           </header>
         )}
@@ -42,4 +41,4 @@ function StepsDisplay({ messages }: StartingStepsProps) {
   )
 }
 
-export default StepsDisplay
+export default ConfirmSteps
