@@ -1,10 +1,11 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useSteps } from "@/contexts/TaskStepContext";
+import React from "react"
+import { useSteps } from "@/contexts/TaskStepContext"
+
 
 export default function Dashboard() {
-  const { steps, userInput } = useSteps();
+  const { steps, userInput } = useSteps()
 
   return (
     <div className="m-8">
@@ -28,5 +29,5 @@ export default function Dashboard() {
         )}
       </div>
     </div>
-  );
+  )
 }

@@ -1,9 +1,10 @@
-import React from "react";
-import { Button } from "./ui/button";
+import React from "react"
+import { Button } from "./ui/button"
+
 
 interface ConfirmButtonProps {
-  isConfirmed: boolean;
-  onClick: () => void;
+  isConfirmed: boolean
+  onClick: () => void
 }
 
 const ConfirmButton: React.FC<ConfirmButtonProps> = ({
@@ -42,7 +43,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
         </svg>
       </div>
     </Button>
-  );
-};
+  )
+}
 
-export default ConfirmButton;
+export default ConfirmButton

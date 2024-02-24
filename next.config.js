@@ -23,8 +23,8 @@ const nextConfig = {
             ? "http://127.0.0.1:8000/api/py/openapi.json"
             : "/api/py/openapi.json",
       },
-    ];
+    ]
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

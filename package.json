@@ -23,13 +23,17 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "concurrently": "^8.0.1",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.29.3",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "langchain": "^0.1.5",
     "lucide-react": "^0.314.0",
     "next": "13.4.4",
     "openai": "^4.25.0",
+    "pg": "^8.11.3",
     "postcss": "8.4.23",
+    "postgres": "^3.4.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwind-merge": "^2.2.1",
@@ -37,5 +41,12 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.0.4",
     "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "drizzle-kit": "^0.20.14",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11"
   }
 }

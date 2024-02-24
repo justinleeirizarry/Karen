@@ -1,10 +1,11 @@
-import React from "react";
-import TextareaWithButton from "./TaskInput";
+import React from "react"
+import TextareaWithButton from "./TaskInput"
+
 
 interface InitialInputProps {
-  input: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  input: string
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
 function InitialInput({
@@ -18,7 +19,7 @@ function InitialInput({
       handleInputChange={handleInputChange}
       handleSubmit={onSubmit} // Ensure onSubmit is correctly used as the form submission handler
     />
-  );
+  )
 }
 
-export default InitialInput;
+export default InitialInput

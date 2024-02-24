@@ -1,19 +1,18 @@
-import React from "react";
+import React from "react"
+import ConfirmButton from "./ConfirmButton"
+import StepEditor from "./StepEditor"
+import { useStepManager } from "./hooks/useStepManager"
+import { Button } from "./ui/button"
 
-import StepEditor from "./StepEditor";
-import { Button } from "./ui/button";
-import ConfirmButton from "./ConfirmButton";
-
-import { useStepManager } from "./hooks/useStepManager";
 
 interface Message {
-  id: string;
-  content: string;
-  confirmed: boolean;
+  id: string
+  content: string
+  confirmed: boolean
 }
 
 interface MessageItemProps {
-  message: Message;
+  message: Message
 }
 
 export const Step: React.FC<MessageItemProps> = () => {
@@ -27,12 +26,12 @@ export const Step: React.FC<MessageItemProps> = () => {
     handleSave,
     handleConfirm,
     handleInsertStepAtIndex,
-  } = useStepManager("");
+  } = useStepManager("")
 
   return (
     <ul className="list-none">
       {steps.map((step, index) => {
-        const isEditing = editingLineIndex === index;
+        const isEditing = editingLineIndex === index
         return (
           <li
             key={step.id}
@@ -68,8 +67,8 @@ export const Step: React.FC<MessageItemProps> = () => {
               )}
             </div>
           </li>
-        );
+        )
       })}
     </ul>
-  );
-};
+  )
+}

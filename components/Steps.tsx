@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { useSteps } from "@/contexts/TaskStepContext";
-import { Step } from "./Step";
-import Link from "next/link";
+import React, { useEffect, useState } from "react"
+import Link from "next/link"
+import { Step } from "./Step"
+import { useSteps } from "@/contexts/TaskStepContext"
+import { v4 as uuidv4 } from "uuid"
+
 
 export interface Message {
-  id: string;
-  content: string;
-  role: string;
-  confirmed: boolean;
+  id: string
+  content: string
+  role: string
+  confirmed: boolean
 }
 
 const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
-  const { steps, setSteps, setUserInput } = useSteps();
-  const [allConfirmed, setAllConfirmed] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { steps, setSteps, setUserInput } = useSteps()
+  const [allConfirmed, setAllConfirmed] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    const latestUserMessage = messages.find((m) => m.role === "user");
+    const latestUserMessage = messages.find((m) => m.role === "user")
     if (latestUserMessage) {
-      setUserInput(latestUserMessage.content);
+      setUserInput(latestUserMessage.content)
     }
 
     const instructions = messages
@@ -30,20 +31,20 @@ const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
           content: line.replace(/^\d+\.\s*/, ""),
           confirmed: false,
         }))
-      );
+      )
 
     if (instructions.length > 0) {
-      setSteps(instructions);
-      setLoading(false);
+      setSteps(instructions)
+      setLoading(false)
     }
-  }, [messages, setSteps, setUserInput]);
+  }, [messages, setSteps, setUserInput])
 
   useEffect(() => {
-    setAllConfirmed(steps.every((step) => step.confirmed));
-  }, [steps]);
+    setAllConfirmed(steps.every((step) => step.confirmed))
+  }, [steps])
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   return (
@@ -57,7 +58,7 @@ const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
         ))}
       {allConfirmed && <Link href="/dashboard">Go to Dashboard</Link>}
     </div>
-  );
-};
+  )
+}
 
-export default Steps;
+export default Steps

@@ -1,10 +1,11 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useSteps } from "../contexts/TaskStepContext";
+import React from "react"
+import { useSteps } from "../contexts/TaskStepContext"
+
 
 const ConfirmedStepsDisplay: React.FC = () => {
-  const { steps } = useSteps();
+  const { steps } = useSteps()
 
   return (
     <div>
@@ -15,7 +16,7 @@ const ConfirmedStepsDisplay: React.FC = () => {
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default ConfirmedStepsDisplay;
+export default ConfirmedStepsDisplay

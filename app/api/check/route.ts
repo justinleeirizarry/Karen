@@ -4,14 +4,13 @@ import { StreamingTextResponse, Message as VercelChatMessage } from "ai"
 import { PromptTemplate } from "langchain/prompts"
 import { BytesOutputParser } from "langchain/schema/output_parser"
 
-
 export const runtime = "edge"
 
 const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`
 }
 
-const TEMPLATE = `You are very powerful task mananger, you're job is to take in tasks and outputs the steps needed to accomplish that task. Include only the steps on your response Do not add any additional comments or exclamations. If a user asked for anything other than task break down respond with no.
+const TEMPLATE = ` It's your job to 
  
 Current conversation:
 {chat_history}

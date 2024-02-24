@@ -1,29 +1,30 @@
-import React from "react";
-import Steps from "./Steps";
+import React from "react"
+import Steps from "./Steps"
 
-type Role = "user" | "assistant" | "function" | "data" | "system" | "tool";
+
+type Role = "user" | "assistant" | "function" | "data" | "system" | "tool"
 
 interface ChatMessage {
-  id: string;
-  content: string;
-  role: Role;
+  id: string
+  content: string
+  role: Role
 }
 
 interface StepsMessage extends ChatMessage {
-  confirmed: boolean;
+  confirmed: boolean
 }
 
 interface StartingStepsProps {
-  messages: ChatMessage[];
+  messages: ChatMessage[]
 }
 
 function StepsDisplay({ messages }: StartingStepsProps) {
   const StepMessages: StepsMessage[] = messages.map((message) => ({
     ...message,
     confirmed: false,
-  }));
+  }))
 
-  const Response = StepMessages.some((m) => m.role === "assistant");
+  const Response = StepMessages.some((m) => m.role === "assistant")
 
   return (
     <div>
@@ -38,7 +39,7 @@ function StepsDisplay({ messages }: StartingStepsProps) {
         <Steps messages={StepMessages} />
       </div>
     </div>
-  );
+  )
 }
 
-export default StepsDisplay;
+export default StepsDisplay

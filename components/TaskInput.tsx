@@ -1,11 +1,12 @@
-"use client";
+"use client"
 
-import { Input } from "./ui/input";
+import { Input } from "./ui/input"
+
 
 interface TextareaWithButtonProps {
-  input: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  input: string
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
 function TaskInput({
@@ -24,7 +25,7 @@ function TaskInput({
         />
       </form>
     </div>
-  );
+  )
 }
 
-export default TaskInput;
+export default TaskInput
