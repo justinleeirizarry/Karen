@@ -1,7 +1,6 @@
 import React from "react"
 import TextareaWithButton from "./TaskInput"
 
-
 interface InitialInputProps {
   input: string
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -17,7 +16,7 @@ function InitialInput({
     <TextareaWithButton
       input={input}
       handleInputChange={handleInputChange}
-      handleSubmit={onSubmit} // Ensure onSubmit is correctly used as the form submission handler
+      handleSubmit={onSubmit}
     />
   )
 }

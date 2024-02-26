@@ -3,7 +3,7 @@ import ConfirmButton from "./ConfirmButton"
 import StepEditor from "./StepEditor"
 import { useStepManager } from "./hooks/useStepManager"
 import { Button } from "./ui/button"
-
+import { addstepAction } from "@/app/actions"
 
 interface Message {
   id: string
@@ -27,7 +27,9 @@ export const Step: React.FC<MessageItemProps> = () => {
     handleConfirm,
     handleInsertStepAtIndex,
   } = useStepManager("")
-
+  const handleInsertStepAtIndexTest = (index: number) => {
+    console.log(`Inserting step at index: ${index}`)
+  }
   return (
     <ul className="list-none">
       {steps.map((step, index) => {
@@ -35,14 +37,14 @@ export const Step: React.FC<MessageItemProps> = () => {
         return (
           <li
             key={step.id}
-            className="m-4 sticky"
+            className="sticky m-4"
             style={{ top: `${index * 40}px`, zIndex: 10 + index }}
           >
             <div
-              className={`rounded-full min-h-[5rem] p-12 text-2xl justify-center transition-all duration-100 ${
+              className={`min-h-[5rem] justify-center rounded-full p-12 text-2xl transition-all duration-100 ${
                 step.confirmed
-                  ? "bg-teal-500 border-4 border-black"
-                  : "bg-white [box-shadow:5px_5px_rgb(82_82_82)] border-4 border-black active:translate-x-[3px] active:translate-y-[3px] active:[box-shadow:0px_0px_rgb(82_82_82)]"
+                  ? "border-4 border-black bg-teal-500"
+                  : "border-4 border-black bg-white [box-shadow:5px_5px_rgb(82_82_82)] active:translate-x-[3px] active:translate-y-[3px] active:[box-shadow:0px_0px_rgb(82_82_82)]"
               }`}
             >
               {isEditing ? (
@@ -56,10 +58,14 @@ export const Step: React.FC<MessageItemProps> = () => {
               ) : (
                 <div className="flex justify-between gap-3">
                   <p className="flex-1">{step.content}</p>
-                  <ConfirmButton
-                    isConfirmed={step.confirmed}
-                    onClick={() => handleConfirm(step.id)}
-                  />
+                  <form
+                    action={addstepAction.bind(null, index + 1, step.content)}
+                  >
+                    <ConfirmButton
+                      isConfirmed={step.confirmed}
+                      onClick={() => handleConfirm(step.id)}
+                    />
+                  </form>
                   {!step.confirmed && (
                     <Button onClick={() => handleEdit(step.id)}>Edit</Button>
                   )}

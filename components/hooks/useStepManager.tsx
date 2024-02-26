@@ -2,14 +2,13 @@ import { useCallback, useState } from "react"
 import { useSteps } from "@/contexts/TaskStepContext"
 import { v4 as uuidv4 } from "uuid"
 
-
 interface Step {
   id: string
   content: string
   confirmed: boolean
 }
 
-export const useStepManager = (initialContent: string) => {
+export const useStepManager = (llmResponse: string) => {
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null)
   const [editedText, setEditedText] = useState<string>("")
 
@@ -54,6 +53,7 @@ export const useStepManager = (initialContent: string) => {
   const handleConfirm = useCallback(
     (id: string) => {
       confirmStep(id)
+      console.log(id)
     },
     [confirmStep]
   )
@@ -62,7 +62,7 @@ export const useStepManager = (initialContent: string) => {
     (index: number) => {
       const newStep = {
         id: uuidv4(),
-        content: "Silence isn't helpful. Please dont leave blank.",
+        content: "Please dont leave blank.",
         confirmed: false,
       }
 

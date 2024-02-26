@@ -4,7 +4,6 @@ import { Step } from "./Step"
 import { useSteps } from "@/contexts/TaskStepContext"
 import { v4 as uuidv4 } from "uuid"
 
-
 export interface Message {
   id: string
   content: string
@@ -51,8 +50,8 @@ const Steps: React.FC<{ messages: Message[] }> = ({ messages }) => {
     <div>
       {messages
         .filter((m) => m.role !== "user")
-        .map((message) => (
-          <div key={message.id} className="mt-2">
+        .map((message, index) => (
+          <div key={index} className="mt-2">
             <Step message={message} />
           </div>
         ))}
