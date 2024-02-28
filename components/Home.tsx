@@ -1,12 +1,9 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
-import { v4 as uuidv4 } from "uuid"
-import { Message, useChat } from "ai/react"
+import React, { useState } from "react"
+import { useChat } from "ai/react"
 import TaskInput from "./TaskInput"
 import Confirmation from "@/components/Confirmation"
-import Steps from "./Steps"
-import { useSteps } from "@/context/TaskStepContext"
 import { usePareMessages } from "./hooks/useParseMessages"
 
 export default function Chat() {
