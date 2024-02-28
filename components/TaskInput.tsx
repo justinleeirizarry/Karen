@@ -1,7 +1,3 @@
-"use client"
-
-import { db } from "@/db"
-import { steps } from "@/db/schema"
 import { Input } from "./ui/input"
 
 interface TaskInputProps {
@@ -19,6 +15,7 @@ function TaskInput({ input, handleInputChange, handleSubmit }: TaskInputProps) {
           placeholder="Have clear expectations. Be specific. Give details "
           value={input}
           onChange={handleInputChange}
+          id="input"
         />
       </form>
     </div>

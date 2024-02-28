@@ -1,6 +1,6 @@
 import React from "react"
-import TaskBreakdown from "@/components/TaskBreakdown"
+import Home from "@/components/Home"
 
 export default function home() {
-  return <TaskBreakdown />
+  return <Home />
 }

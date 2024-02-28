@@ -1,8 +1,7 @@
 "use client"
 
 import React from "react"
-import { useSteps } from "@/contexts/TaskStepContext"
-
+import { useSteps } from "@/context/TaskStepContext"
 
 export default function Dashboard() {
   const { steps, userInput } = useSteps()

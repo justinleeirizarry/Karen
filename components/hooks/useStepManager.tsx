@@ -1,12 +1,8 @@
-import { useCallback, useState } from "react"
-import { useSteps } from "@/contexts/TaskStepContext"
-import { v4 as uuidv4 } from "uuid"
+"use client"
 
-interface Step {
-  id: string
-  content: string
-  confirmed: boolean
-}
+import { useCallback, useState } from "react"
+import { useSteps } from "@/context/TaskStepContext"
+import { v4 as uuidv4 } from "uuid"
 
 export const useStepManager = (llmResponse: string) => {
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null)
@@ -53,7 +49,6 @@ export const useStepManager = (llmResponse: string) => {
   const handleConfirm = useCallback(
     (id: string) => {
       confirmStep(id)
-      console.log(id)
     },
     [confirmStep]
   )

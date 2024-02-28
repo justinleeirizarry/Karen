@@ -3,7 +3,6 @@
 import React, { createContext, useCallback, useContext, useState } from "react"
 import { v4 as uuidv4 } from "uuid"
 
-
 interface Step {
   id: string
   content: string
@@ -13,6 +12,8 @@ interface Step {
 interface StepsContextProps {
   steps: Step[]
   userInput: string
+  task: string
+  setTask: (task: string) => void
   addStep: (stepContent: string) => void
   removeStep: (stepId: string) => void
   updateStep: (stepId: string, newContent: string) => void
@@ -29,6 +30,7 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
 }) => {
   const [steps, setSteps] = useState<Step[]>([])
   const [userInput, setUserInput] = useState<string>("")
+  const [task, setTask] = useState<string>("")
 
   const addStep = useCallback((stepContent: string) => {
     const newStep = { id: uuidv4(), content: stepContent, confirmed: false }
@@ -68,6 +70,8 @@ export const StepsProvider: React.FC<React.PropsWithChildren<{}>> = ({
       value={{
         steps,
         userInput,
+        task,
+        setTask,
         addStep,
         removeStep,
         updateStep,

@@ -1,7 +1,6 @@
 import React from "react"
 import { Button } from "./ui/button"
 
-
 interface ConfirmButtonProps {
   isConfirmed: boolean
   onClick: () => void
@@ -15,7 +14,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
     <Button
       onClick={onClick}
       className={`group relative inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-full font-medium text-neutral-200 transition-all duration-300 ${
-        isConfirmed ? "bg-transparent" : "hover:w-32 bg-sky-500"
+        isConfirmed ? "bg-transparent" : "bg-sky-500 hover:w-32"
       } ${isConfirmed ? "pointer-events-none" : ""}`}
     >
       <div

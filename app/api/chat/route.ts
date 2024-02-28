@@ -11,10 +11,7 @@ const formatMessage = (message: VercelChatMessage) => {
   return `${message.role}: ${message.content}`
 }
 
-const TEMPLATE = `You are very powerful task mananger, you're job is to take in tasks and outputs the steps needed to accomplish that task. Include only the steps on your response Do not add any additional comments or exclamations. If a user asked for anything other than task break down respond with no.
- 
-Current conversation:
-{chat_history}
+const TEMPLATE = `You are very powerful task mananger, your job is to take in tasks and outputs the steps needed to accomplish that task. Repsond with the steps only. Do not add any additional comments or exclamations.
  
 User: {input}
 AI:`

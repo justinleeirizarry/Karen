@@ -1,7 +1,6 @@
 import { Roboto } from "next/font/google"
 import "./globals.css"
-import { StepsProvider } from "@/contexts/TaskStepContext"
-
+import { StepsProvider } from "@/context/TaskStepContext"
 
 const roboto = Roboto({
   weight: ["400", "700", "900"],
