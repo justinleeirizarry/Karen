@@ -4,14 +4,14 @@ import React, { useState } from "react"
 import { useChat } from "ai/react"
 import TaskInput from "./TaskInput"
 import Confirmation from "@/components/Confirmation"
-import { usePareMessages } from "./hooks/useParseMessages"
+import { useParseMessages } from "./hooks/useParseMessages"
 
 export default function Chat() {
+  const [showInput, setShowInput] = useState(true)
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat()
-  const [showInput, setShowInput] = useState(true)
 
-  usePareMessages(messages)
+  useParseMessages(messages)
 
   if (isLoading) {
     return <h1>Temporary Loading Screeeeeeeen......</h1>

@@ -4,7 +4,7 @@ import { useSteps } from "@/context/TaskStepContext";
 import { extractSteps } from "./useStepExtractor"; 
 
 
-export function usePareMessages(messages: Message[]) {
+export function useParseMessages(messages: Message[]) {
   
   const { setSteps, setUserInput } = useSteps();
 

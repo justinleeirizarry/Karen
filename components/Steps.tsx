@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Step } from "./Step"
 import { useSteps } from "@/context/TaskStepContext"
 
-export interface Message {
+export interface StepProp {
   id: string
   content: string
   confirmed: boolean
@@ -19,11 +19,23 @@ const Steps: React.FC = () => {
 
   return (
     <div>
-      {steps.map((step, index) => (
-        <div key={index} className="mt-2">
-          <Step message={step} index={index} />
-        </div>
-      ))}
+      <ul className="list-none">
+        {steps.map((step, index) => (
+          <li
+            key={step.id}
+            className="sticky m-4"
+            style={
+              {
+                top: `${index * 40}px`,
+                zIndex: 10 + index,
+              } as React.CSSProperties
+            }
+          >
+            <Step message={step} index={index} />
+          </li>
+        ))}
+      </ul>
+
       {allConfirmed && <Link href="/dashboard">Go to Dashboard</Link>}
     </div>
   )
