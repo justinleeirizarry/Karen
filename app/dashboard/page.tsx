@@ -4,11 +4,11 @@ import React from "react"
 import { useSteps } from "@/context/TaskStepContext"
 
 export default function Dashboard() {
-  const { steps, userInput } = useSteps()
+  const { steps, userInput, title } = useSteps()
 
   return (
     <div className="m-8">
-      <h1 className=" text-5xl">Dashboard Test</h1>
+      <h1 className=" text-5xl">{title}</h1>
 
       <div className="m-8">
         <h2 className="text-2xl">User Input:</h2>
